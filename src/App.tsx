@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import JWTLogin from './pages/JWTLogin'
 import JWTLoginWithLocalStorage from './pages/JWTLoginWithLocalStorage'
+import AutoLogin from './pages/AutoLogin'
 import './App.css'
 
 const router = createBrowserRouter([
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
   {
     path: "/local-storage",
     element: <JWTLoginWithLocalStorage/>,
+  },
+  {
+    path: "/other-page",
+    element: <AutoLogin/>,
   },
 ]);
 

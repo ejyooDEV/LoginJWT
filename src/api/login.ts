@@ -59,10 +59,6 @@ export const login = async (args: LoginRequest): Promise<LoginResult> => {
 }
 
 export const getCurrentUserInfoWithToken = async (token: string): Promise<UserInfo | null> => {
-  // TODO : 토큰 직접 주입 받아 사용하기
-  // 1. GET, `${ BASE_URL }/profile` 호출
-  // 2. 리턴된 token을 Authorization header - Bearer token으로 추가
-  // 유저 정보 조회 성공 시 UserInfo 타입 반환
   const userInfoRes = await fetch(`${ BASE_URL }/profile`, {
     method: 'GET',
     headers: {
@@ -77,6 +73,7 @@ export const getCurrentUserInfoWithToken = async (token: string): Promise<UserIn
 
   return null
 }
+
 export const getCurrentUserInfo = async (): Promise<UserInfo | null> => {
   const userInfoRes = await fetchClient(
     `${ BASE_URL }/profile`,
