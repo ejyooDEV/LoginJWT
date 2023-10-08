@@ -1,6 +1,7 @@
 import { BASE_URL } from './const'
 import { getAccessTokenFromLocalStorage, saveAccessTokenToLocalStorage } from '../utils/accessTokenHandler'
 import { UserInfo } from '../types/user'
+import { fetchClient } from './fetchClient'
 
 type LoginResult = 'success' | 'fail'
 
@@ -18,9 +19,6 @@ export interface LoginRequest {
 }
 
 export const loginWithToken = async (args: LoginRequest): Promise<LoginResultWithToken> => {
-  // TODO : 로그인 API 호출 / 토큰 반환하기
-  // 1. POST, `${ BASE_URL }/auth/login` 호출
-  // 2. access_token 발급 성공 시 { result: 'success', access_token: string } 형태 값 반환
   const loginRes = await fetch(`${ BASE_URL }/auth/login`, {
     method: 'POST',
     headers: {
@@ -43,6 +41,23 @@ export const loginWithToken = async (args: LoginRequest): Promise<LoginResultWit
   }
 }
 
+export const login = async (args: LoginRequest): Promise<LoginResult> => {
+  const loginRes = await fetch(`${ BASE_URL }/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(args)
+  })
+
+  if (loginRes.ok) {
+    const loginResponseData = await loginRes.json()
+    saveAccessTokenToLocalStorage(loginResponseData.access_token)
+    return 'success'
+  }
+  return 'fail'
+}
+
 export const getCurrentUserInfoWithToken = async (token: string): Promise<UserInfo | null> => {
   // TODO : 토큰 직접 주입 받아 사용하기
   // 1. GET, `${ BASE_URL }/profile` 호출
@@ -59,6 +74,18 @@ export const getCurrentUserInfoWithToken = async (token: string): Promise<UserIn
   if (userInfoRes.ok) {
     return userInfoRes.json() as Promise<UserInfo>
   }
-  
+
+  return null
+}
+export const getCurrentUserInfo = async (): Promise<UserInfo | null> => {
+  const userInfoRes = await fetchClient(
+    `${ BASE_URL }/profile`,
+    { method: 'GET' }
+  )
+
+  if (userInfoRes.ok) {
+    return userInfoRes.json() as Promise<UserInfo>
+  }
+
   return null
 }
