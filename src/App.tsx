@@ -1,11 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LoginWithMockAPI from './pages/LoginWithMockAPI'
+import JWTLogin from './pages/JWTLogin'
 import './App.css'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginWithMockAPI/>,
+    element: <JWTLogin/>,
   },
 ]);
 
